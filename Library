@@ -50,8 +50,8 @@
 				<div class="row">
 					<div class="col-3">
 						<section class="box">
-						<!-- <p style="color:whitesmoke;text-align:left;margin-top: 30%;">Contact</p> -->
-            <img src="IMG_3406.heic" alt="IMG_3406.heic">
+						<p style="color:whitesmoke;text-align:left;margin-top: 30%;"> ^_*</p>
+            					
 						</section>
 					</div>
 				</div>
@@ -60,14 +60,15 @@
 				<br>
 				
 				<!--<article class="box post">-->
-				<!--<div class="row">-->
-					<!--<div class="col-md-auto">-->
-						<!--<section class="box">-->
+				<div class="row">
+					<div class="col-md-auto">
+						<section class="box">
 						<!--<p style="color:white;text-align:left;">jl508@rice.edu<br>-->
-						<!--</p>-->
-						<!--</section>-->
-					<!--</div>-->
-				<!--</div>-->
+						<img src="IMG_3406.heic" alt="IMG_3406.heic">
+						</p>
+						</section>
+					</div>
+				</div>
 				<!--</article>-->
 						
 			</div>
