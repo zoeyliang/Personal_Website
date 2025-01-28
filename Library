@@ -1,0 +1,100 @@
+
+<!DOCTYPE HTML>
+<!-- !Contact -->
+
+<html>
+<head>
+	<title>JiaxingLiang</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+</head>
+	
+<style>
+	body {
+	font-family: Courier;
+	background-image: url("images/potw2036a.jpeg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: center;
+	width: 100%;
+	image-rendering: -webkit-optimize-contrast;
+	}
+	
+	#footer {
+	position: absolute;
+	padding: 10px 10px 0px 10px;
+	bottom: 0;
+	height: 10px;
+	width: 100%;
+	background: transparent;
+	}
+	.main_line {
+	display: block;
+	width: 100%;
+	margin:1% auto;
+	}	
+</style>
+	
+<body class="Contact is-preload">
+	<div id="page-wrapper">
+
+		<!-- Header -->
+		<section id="main" class="wrapper">
+
+			<!-- Main -->
+			<div class="title">Contact</div>
+			<div class="container">
+				
+				<div class="row">
+					<div class="col-3">
+						<section class="box">
+						<!-- <p style="color:whitesmoke;text-align:left;margin-top: 30%;">Contact</p> -->
+            <img src="IMG_3406.heic" alt="IMG_3406.heic">
+						</section>
+					</div>
+				</div>
+				
+				<hr class="main_line" />
+				<br>
+				
+				<!--<article class="box post">-->
+				<!--<div class="row">-->
+					<!--<div class="col-md-auto">-->
+						<!--<section class="box">-->
+						<!--<p style="color:white;text-align:left;">jl508@rice.edu<br>-->
+						<!--</p>-->
+						<!--</section>-->
+					<!--</div>-->
+				<!--</div>-->
+				<!--</article>-->
+						
+			</div>
+			
+			<!-- Nav -->
+			<nav id="nav">
+				<ul>
+				<li class="current"><a href="index.html">Home</a></li>
+				<li><a href="Background.html">Background</a></li>
+				<li><a href="ResearchInterest.html">Research Interest</a></li>
+				<li><a href="Teaching.html">Teaching</a></li>
+				<li><a href="Publication.html">Publication</a></li>
+				<li><a href="Contact.html">Contact</a></li>
+				</ul>
+			</nav>
+
+		</section>
+
+	</div>
+
+<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/jquery.dropotron.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+
+</body>
+</html>
