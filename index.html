@@ -36,21 +36,21 @@
 </style>
 
 <body class="homepage is-preload">
-	<!-- 新增音乐播放器 -->
+	
 	<div id="music-player" title="Background Music">
 		<i class="fas fa-music fa-2x"></i>
 	</div>
 
-	<!-- 新增Youtube音频播放器 -->
+	
 	<iframe 
 		id="youtube-audio"
-		src="https://www.youtube.com/embed/FRSPnihuhUg?autoplay=1&loop=1&mute=1&enablejsapi=1"
+		src="https://www.youtube.com/watch?v=FRSPnihuhUg"
 		frameborder="0" 
 		allow="accelerometer; autoplay; encrypted-media; gyroscope">
 	</iframe>
 
 	<div id="page-wrapper">
-		<!-- 原有页面结构保持不变 -->
+		
 		<section id="header" class="wrapper">
 
 			<!-- Header -->
@@ -86,14 +86,14 @@
 		</section>
 	</div>
 
-	<!-- 新增音乐控制脚本 -->
+	
 	<script>
-		// 音乐控制逻辑
+		
 		const musicIcon = document.getElementById('music-player');
 		const audioFrame = document.getElementById('youtube-audio');
 		let isMuted = true;
 
-		// 点击图标控制静音
+		
 		musicIcon.addEventListener('click', () => {
 			isMuted = !isMuted;
 			audioFrame.contentWindow.postMessage(JSON.stringify({
@@ -102,7 +102,7 @@
 			}), '*');
 		});
 
-		// 首次交互后自动播放
+		
 		document.addEventListener('click', () => {
 			audioFrame.contentWindow.postMessage(JSON.stringify({
 				event: 'command',
@@ -111,8 +111,6 @@
 		}, { once: true });
 	</script>
 
-	<!-- 原有脚本保持不变 -->
-	<script src="assets/js/jquery.min.js"></script>
-	... [其他原有脚本] ...
+
 </body>
 </html>
