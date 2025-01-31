@@ -6,53 +6,55 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="assets/css/main.css" />
-	
+	<!-- 图标字体库 -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <style>
+	body {
+		font-family: Courier;
+		background-image: url("images/home_backgrd.jpg");
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+		background-position: center;
+		width: 100%;
+		image-rendering: -webkit-optimize-contrast;
+	}
 	
-	#music-player {
+	#footer {
+		position: absolute;
+		bottom: 0;
+		height: 10px;
+		width: 100%;
+		background: transparent;
+	}
+
+	/* 新增音乐控件样式 */
+	#music-control {
 		position: fixed;
 		bottom: 20px;
 		right: 20px;
 		z-index: 9999;
-		color: #000;
+		color: #999;  /* 浅灰色 */
 		cursor: pointer;
-		transition: 0.3s;
+		opacity: 0.9;
+		transition: all 0.3s;
 	}
-	
-	#music-player:hover {
-		color: #666;
-	}
-
-	
-	#youtube-audio {
-		position: absolute;
-		width: 0;
-		height: 0;
-		opacity: 0;
+	#music-control:hover {
+		color: #666;  /* 悬停深灰色 */
+		opacity: 1;
 	}
 </style>
 
 <body class="homepage is-preload">
-	
-	<div id="music-player" title="Background Music">
-		<i class="fas fa-music fa-2x"></i>
+	<!-- 音乐控制图标 -->
+	<div id="music-control" title="Background Music">
+		<i class="fas fa-music fa-lg"></i>
 	</div>
 
-	
-	<iframe 
-		id="youtube-audio"
-		src="https://www.youtube.com/watch?v=FRSPnihuhUg"
-		frameborder="0" 
-		allow="accelerometer; autoplay; encrypted-media; gyroscope">
-	</iframe>
-
 	<div id="page-wrapper">
-		
 		<section id="header" class="wrapper">
-
 			<!-- Header -->
 			<nav id="logo" class="navbar navbar-default">
 				<h1 style="color:white;font-size:35px;">JIAXING LIANG</h1>
@@ -60,16 +62,15 @@
 				<p style="color:white;font-size:20px;font-style:bold">Hi, Welcome to my space (.<_<)</p>
 			</nav>
 
-
 			<nav id="nav">
 				<ul>
-				<li class="current"><a href="index.html">Home</a></li>
-				<li><a href="Background.html">Background</a></li>
-				<li><a href="ResearchInterest.html">Research Interest</a></li>
-				<li><a href="Teaching.html">Teaching</a></li>
-				<li><a href="Publication.html">Publication</a></li>
-				<li><a href="Contact.html">Contact</a></li>
-				<li><a href="Library.html">^_*</a></li>
+					<li class="current"><a href="index.html">Home</a></li>
+					<li><a href="Background.html">Background</a></li>
+					<li><a href="ResearchInterest.html">Research Interest</a></li>
+					<li><a href="Teaching.html">Teaching</a></li>
+					<li><a href="Publication.html">Publication</a></li>
+					<li><a href="Contact.html">Contact</a></li>
+					<li><a href="Library.html">^_*</a></li>
 				</ul>
 			</nav>
 
@@ -78,7 +79,8 @@
 				<div class="container">
 					<div id="copyright">
 						<ul>
-						<li>Last updated: Jan 22, 2025</li><li>Background pics: from NASA Website</li>
+							<li>Last updated: Jan 22, 2025</li>
+							<li>Background pics: from NASA Website</li>
 						</ul>
 					</div>
 				</div>
@@ -86,31 +88,44 @@
 		</section>
 	</div>
 
-	
+	<!-- 隐藏的YouTube音频播放器 -->
+	<iframe 
+		style="display:none"
+		src="https://www.youtube.com/embed/FRSPnihuhUg?autoplay=1&loop=1&mute=1&playlist=FRSPnihuhUg"
+		allow="autoplay; encrypted-media">
+	</iframe>
+
+	<!-- 音乐控制脚本 -->
 	<script>
-		
-		const musicIcon = document.getElementById('music-player');
-		const audioFrame = document.getElementById('youtube-audio');
+		// 音乐控制逻辑
+		const musicBtn = document.getElementById('music-control');
 		let isMuted = true;
 
-		
-		musicIcon.addEventListener('click', () => {
+		// 点击图标切换静音
+		musicBtn.addEventListener('click', () => {
 			isMuted = !isMuted;
-			audioFrame.contentWindow.postMessage(JSON.stringify({
-				event: 'command',
-				func: isMuted ? 'mute' : 'unMute'
-			}), '*');
+			musicBtn.style.color = isMuted ? '#999' : '#666';
+			document.querySelector('iframe').contentWindow.postMessage(
+				JSON.stringify({ event: 'command', func: isMuted ? 'mute' : 'unMute' }),
+				'*'
+			);
 		});
 
-		
+		// 首次点击页面激活音频
 		document.addEventListener('click', () => {
-			audioFrame.contentWindow.postMessage(JSON.stringify({
-				event: 'command',
-				func: 'playVideo'
-			}), '*');
+			document.querySelector('iframe').contentWindow.postMessage(
+				JSON.stringify({ event: 'command', func: 'playVideo' }),
+				'*'
+			);
 		}, { once: true });
 	</script>
 
-
+	<!-- 原有脚本 -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/jquery.dropotron.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
 </body>
 </html>
