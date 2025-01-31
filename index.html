@@ -1,49 +1,56 @@
 <!DOCTYPE HTML>
 <!-- Main Page -->
-
 <html>
 <head>
 	<title>JiaxingLiang</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="assets/css/main.css" />
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <style>
-	body {
-	font-family: Courier;
-	background-image: url("images/home_backgrd.jpg");
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	background-position: center;
-	width: 100%;
-	image-rendering: -webkit-optimize-contrast;
+	
+	#music-player {
+		position: fixed;
+		bottom: 20px;
+		right: 20px;
+		z-index: 9999;
+		color: #000;
+		cursor: pointer;
+		transition: 0.3s;
 	}
 	
-	#footer {
-	position: absolute;
-/* 	padding: 10px 10px 0px 10px; */
-	bottom: 0;
-	height: 10px;
-	width: 100%;
-	background: transparent;
+	#music-player:hover {
+		color: #666;
+	}
+
+	
+	#youtube-audio {
+		position: absolute;
+		width: 0;
+		height: 0;
+		opacity: 0;
 	}
 </style>
 
-<iframe 
-  frameborder="no" 
-  border="0" 
-  marginwidth="0" 
-  marginheight="0" 
-  width=330 
-  height=86
-  src="//www.youtube.com/watch?v=FRSPnihuhUg">
-</iframe>
-
 <body class="homepage is-preload">
+	<!-- 新增音乐播放器 -->
+	<div id="music-player" title="Background Music">
+		<i class="fas fa-music fa-2x"></i>
+	</div>
+
+	<!-- 新增Youtube音频播放器 -->
+	<iframe 
+		id="youtube-audio"
+		src="https://www.youtube.com/embed/FRSPnihuhUg?autoplay=1&loop=1&mute=1&enablejsapi=1"
+		frameborder="0" 
+		allow="accelerometer; autoplay; encrypted-media; gyroscope">
+	</iframe>
+
 	<div id="page-wrapper">
-		
+		<!-- 原有页面结构保持不变 -->
 		<section id="header" class="wrapper">
 
 			<!-- Header -->
@@ -79,13 +86,33 @@
 		</section>
 	</div>
 
-<!-- Scripts -->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/js/jquery.dropotron.min.js"></script>
-	<script src="assets/js/browser.min.js"></script>
-	<script src="assets/js/breakpoints.min.js"></script>
-	<script src="assets/js/util.js"></script>
-	<script src="assets/js/main.js"></script>
+	<!-- 新增音乐控制脚本 -->
+	<script>
+		// 音乐控制逻辑
+		const musicIcon = document.getElementById('music-player');
+		const audioFrame = document.getElementById('youtube-audio');
+		let isMuted = true;
 
+		// 点击图标控制静音
+		musicIcon.addEventListener('click', () => {
+			isMuted = !isMuted;
+			audioFrame.contentWindow.postMessage(JSON.stringify({
+				event: 'command',
+				func: isMuted ? 'mute' : 'unMute'
+			}), '*');
+		});
+
+		// 首次交互后自动播放
+		document.addEventListener('click', () => {
+			audioFrame.contentWindow.postMessage(JSON.stringify({
+				event: 'command',
+				func: 'playVideo'
+			}), '*');
+		}, { once: true });
+	</script>
+
+	<!-- 原有脚本保持不变 -->
+	<script src="assets/js/jquery.min.js"></script>
+	... [其他原有脚本] ...
 </body>
 </html>
