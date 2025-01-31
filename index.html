@@ -6,20 +6,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="assets/css/main.css" />
-    <!-- 图标字体 & 音乐状态初始化 -->
+    <!-- 添加字体图标 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script>
-        // 音乐状态加载器
-        window.audioState = JSON.parse(localStorage.getItem('audioState')) || {
-            playing: true,
-            volume: 0.5,
-            progress: 0
-        };
-    </script>
 </head>
 
 <style>
-    /* 原有样式 */
     body {
         font-family: Courier;
         background-image: url("images/home_backgrd.jpg");
@@ -39,42 +30,41 @@
         background: transparent;
     }
 
-    /* 新增音乐控件样式 */
-    #music-ctl {
+    /* 音乐播放器样式 */
+    #music-player {
         position: fixed;
         bottom: 20px;
         right: 20px;
         z-index: 9999;
-        color: #999;
+        color: #999; /* 初始浅灰色 */
         cursor: pointer;
-        font-family: Courier;
-        background: rgba(0,0,0,0.3);
-        padding: 8px 15px;
-        border-radius: 20px;
         transition: all 0.3s;
     }
-    #music-ctl:hover { color: #666; }
-    #music-status {
-        font-size: 0.8em;
-        margin-left: 8px;
-        vertical-align: middle;
+    #music-player:hover {
+        color: #666; /* 悬停深灰色 */
+    }
+
+    /* 隐藏YouTube播放器 */
+    #youtube-player {
+        position: absolute;
+        width: 0;
+        height: 0;
+        opacity: 0;
     }
 </style>
 
 <body class="homepage is-preload">
-    <!-- 全局音乐控制器 -->
-    <div id="music-ctl" title="Background Music">
-        <i class="fas fa-music"></i>
-        <span id="music-status">[loading]</span>
+    <!-- 音乐控制图标 -->
+    <div id="music-player" title="Background Music">
+        <i class="fas fa-music fa-lg"></i>
     </div>
-    <audio id="global-audio" loop>
-        <source src="/audio/bgm.mp3" type="audio/mpeg">
-        <source src="/audio/bgm.ogg" type="audio/ogg">
-    </audio>
+
+    <!-- YouTube播放器容器 -->
+    <div id="youtube-player"></div>
 
     <div id="page-wrapper">
         <section id="header" class="wrapper">
-            <!-- Header -->
+            <!-- 原有Header内容保持不变 -->
             <nav id="logo" class="navbar navbar-default">
                 <h1 style="color:white;font-size:35px;">JIAXING LIANG</h1>
                 <br>
@@ -107,60 +97,63 @@
         </section>
     </div>
 
-    <!-- 音乐控制脚本 -->
+    <!-- YouTube音乐控制脚本 -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const audio = document.getElementById('global-audio');
-            const ctl = document.getElementById('music-ctl');
-            const status = document.getElementById('music-status');
+        // 初始化YouTube播放器
+        let player;
+        const videoId = 'FRSPnihuhUg'; // YouTube视频ID
+        
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: videoId,
+                playerVars: {
+                    autoplay: 1,
+                    mute: 1, // 初始静音以绕过自动播放限制
+                    loop: 1,
+                    playlist: videoId
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
 
-            // 加载存储状态
-            audio.volume = audioState.volume;
-            audio.currentTime = audioState.progress;
+        function onPlayerReady(event) {
+            const musicIcon = document.getElementById('music-player');
+            let isMuted = true;
 
-            // 自动播放处理
-            const playAudio = () => {
-                audio.play()
-                    .then(() => {
-                        audio.muted = false;
-                        status.textContent = '[playing]';
-                        ctl.style.color = '#666';
-                    })
-                    .catch(() => {
-                        status.textContent = '[click to start]';
-                        ctl.onclick = () => {
-                            audio.play();
-                            ctl.onclick = toggleMute;
-                        };
-                    });
-            };
+            // 点击切换静音
+            musicIcon.addEventListener('click', () => {
+                isMuted = !isMuted;
+                player.isMuted() ? player.unMute() : player.mute();
+                musicIcon.style.color = isMuted ? '#999' : '#666';
+            });
 
-            // 静音切换
-            const toggleMute = () => {
-                audio.muted = !audio.muted;
-                status.textContent = audio.muted ? '[muted]' : '[playing]';
-                ctl.style.color = audio.muted ? '#999' : '#666';
-                localStorage.setItem('audioState', JSON.stringify({
-                    playing: !audio.muted,
-                    volume: audio.volume,
-                    progress: audio.currentTime
-                }));
-            };
+            // 首次点击页面解除静音
+            document.addEventListener('click', function initPlay() {
+                if(isMuted) {
+                    player.unMute();
+                    musicIcon.style.color = '#666';
+                    isMuted = false;
+                }
+                document.removeEventListener('click', initPlay);
+            }, { once: true });
+        }
 
-            // 保存播放进度
-            setInterval(() => {
-                localStorage.setItem('audioState', JSON.stringify({
-                    playing: !audio.muted,
-                    volume: audio.volume,
-                    progress: audio.currentTime
-                }));
-            }, 1000);
+        function onPlayerStateChange(event) {
+            // 循环播放处理
+            if(event.data === YT.PlayerState.ENDED) {
+                player.playVideo();
+            }
+        }
 
-            // 初始化音乐
-            audio.muted = !audioState.playing;
-            ctl.onclick = toggleMute;
-            playAudio();
-        });
+        // 加载YouTube API
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.head.appendChild(tag);
     </script>
 
     <!-- 原有脚本 -->
